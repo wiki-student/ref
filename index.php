@@ -11,11 +11,9 @@
 </body>
 </html>
 <?php 
+    require_once "config.php";
     $id = $_POST['id'];
     $name = $_POST['name'];
-    $db_host = "localhost"; 
-    $db_base = 'test'; 
-    $db_table = "mytable";
     try {
         $db = new PDO("mysql:host=$db_host;dbname=$db_base");
         $db->exec("set names utf8");
