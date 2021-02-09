@@ -15,7 +15,7 @@
     $id = $_POST['id'];
     $name = $_POST['name'];
     try {
-        $db = new PDO("mysql:host=$db_host;dbname=$db_base");
+        $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
         $db->exec("set names utf8");
     } catch (PDOException $e) {
         print "Ошибка!: " . $e->getMessage() . "<br/>";
