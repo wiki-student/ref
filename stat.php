@@ -59,7 +59,6 @@ VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dr
  '$f_duplex','$f_gateway','$f_ip','$f_name','$f_netmask','$f_speed','$f_s_received_bytes','$f_s_received_discard_packets','$f_s_received_error_packets','$f_s_received_multicast_packets','$f_s_received_total_packets','$f_s_sent_bytes','$f_s_sent_error_packets','$f_s_sent_total_packets','$f_timestamp','$f_type',
  '$t_duplex','$t_gateway','$t_ip','$t_name','$t_netmask','$t_speed','$t_s_received_bytes','$t_s_received_discard_packets','$t_s_received_error_packets','$t_s_received_multicast_packets','$t_s_received_total_packets','$t_s_sent_bytes','$t_s_sent_error_packets','$t_s_sent_total_packets','$t_timestamp','$t_type')");
 $query->execute($data);
-var_dump($_SERVER);
 function __log($msg) {
   error_log(date("Y-m-d H:i:s")."   ".$msg."\n",3,"/tmp/stb_stat.log");}
 ?>
