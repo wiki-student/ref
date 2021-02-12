@@ -2,8 +2,8 @@
 __log( $_SERVER['REMOTE_ADDR']);
 require_once "config.php";
 $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-$content = json_decode(file_get_contents('php://input'), true);
-file_put_contents("/tmp/tvip.json", $content, FILE_APPEND);
+$jsonCont = json_decode(file_get_contents('php://input'), true);
+file_put_contents("/tmp/tvip.json", $jsonCont, FILE_APPEND);
 $content = json_decode($jsonCont, true);
 $R_IP = $_SERVER['REMOTE_ADDR'];
 $adaptive_bandwidth = $content['0']['adaptive_bandwidth'];
