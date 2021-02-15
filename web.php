@@ -1,8 +1,8 @@
 <?php 
    require_once("config.php");
-    $link = mysqli_connect($db_host, $db_user, $pass, $db_name);
+    $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
     if (!$link) {
-        echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
+        echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . ', error: ' . mysqli_connect_error();
         exit;
       }
       $sql = mysqli_query($link, 'SELECT `adaptive_bandwidth`, `a_frames_decoded`, `a_frames_dropped`, `a_frames_failed`, `avg_bitrate`, `begin`,`discontinuties`,`end`,`id`,`proto`,`timestamp`,`type`,`v_frames_decoded`, `v_frames_dropped`, `v_frames_failed`, 
