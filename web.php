@@ -1,8 +1,5 @@
 <?php 
-    $db_user = "root";
-    $db_host = "localhost"; 
-    $db_name = 'iptv2';
-    $db_pass = '';
+   require_once("config.php");
     $link = mysqli_connect($db_host, $db_user, $pass, $db_name);
     if (!$link) {
         echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
