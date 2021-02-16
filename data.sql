@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `data` (
   `v_frames_failed` int(11) NOT NULL,
   `duplex` text NOT NULL,
   `gateway` int(11) unsigned NOT NULL,
-  `IP_net` int(11) unsigned NOT NULL,
+  `IP_inner` int(11) unsigned NOT NULL,
   `name` text NOT NULL,
   `netmask` int(11) unsigned NOT NULL,
   `speed` int(11) NOT NULL,
