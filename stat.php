@@ -3,8 +3,7 @@ require_once "config.php";
 __log( $_SERVER['REMOTE_ADDR']);
 $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
 $content = json_decode(file_get_contents('php://input'),true);
-$R_IP = $_SERVER['REMOTE_ADDR'];
-$R_IP1 = ip2long ($R_IP);
+$IP = ip2long ($_SERVER['REMOTE_ADDR']);
 $adaptive_bandwidth = $content['0']['adaptive_bandwidth'];
 $begin = $content['0']['begin'];
 $end = $content['0']['end'];
@@ -51,10 +50,10 @@ $t_s_sent_error_packets = $content['2']['stat']['sent_error_packets'];
 $t_s_sent_total_packets = $content['2']['stat']['sent_total_packets'];
 $t_timestamp = $content['2']['timestamp'];
 $t_type = $content['2']['type'];
-$query = "INSERT INTO data (begin, end, adaptive_bandwidth, a_frames_decoded, a_frames_dropped, a_frames_failed, avg_bitrate, id, timestamp, v_frames_decoded, v_frames_dropped, v_frames_failed, type, discontinuties, Remote_IP,
+$query = "INSERT INTO data (begin, end, adaptive_bandwidth, a_frames_decoded, a_frames_dropped, a_frames_failed, avg_bitrate, id, timestamp, v_frames_decoded, v_frames_dropped, v_frames_failed, type, discontinuties, IP,
   f_duplex, f_gateway, f_ip, f_name, f_netmask, f_speed, f_s_received_bytes, f_s_received_discard_packets, f_s_received_error_packets, f_s_received_multicast_packets, f_s_received_total_packets, f_s_sent_bytes, f_s_sent_error_packets, f_s_sent_total_packets,f_timestamp, f_type,
   t_duplex, t_gateway, t_ip, t_name, t_netmask, t_speed, t_s_received_bytes, t_s_received_discard_packets, t_s_received_error_packets, t_s_received_multicast_packets, t_s_received_total_packets, t_s_sent_bytes, t_s_sent_error_packets, t_s_sent_total_packets,t_timestamp, t_type)
-VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dropped', '$a_frames_failed','$avg_bitrate', '$id', '$timestamp', '$v_frames_decoded', '$v_frames_dropped', '$v_frames_failed','$type','$discontinuties', '$R_IP1',
+VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dropped', '$a_frames_failed','$avg_bitrate', '$id', '$timestamp', '$v_frames_decoded', '$v_frames_dropped', '$v_frames_failed','$type','$discontinuties', '$IP',
  '$f_duplex','$f_gateway','$f_ip','$f_name','$f_netmask','$f_speed','$f_s_received_bytes','$f_s_received_discard_packets','$f_s_received_error_packets','$f_s_received_multicast_packets','$f_s_received_total_packets','$f_s_sent_bytes','$f_s_sent_error_packets','$f_s_sent_total_packets','$f_timestamp','$f_type',
  '$t_duplex','$t_gateway','$t_ip','$t_name','$t_netmask','$t_speed','$t_s_received_bytes','$t_s_received_discard_packets','$t_s_received_error_packets','$t_s_received_multicast_packets','$t_s_received_total_packets','$t_s_sent_bytes','$t_s_sent_error_packets','$t_s_sent_total_packets','$t_timestamp','$t_type')";
 __log($query);
