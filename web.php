@@ -14,11 +14,11 @@
         echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . ', error: ' . mysqli_connect_error();
         exit;
       }
-      $sql = mysqli_query($link, 'SELECT IP, f_name, f_speed, timestamp, a_frames_failed/a_frames_decoded*100 AS "a", timestamp, v_frames_failed/v_frames_decoded*100 AS "v" FROM data');?>
+      $sql = mysqli_query($link, 'SELECT IP, f_name, f_speed, FROM_UNIXTIME(timestamp) AS time, a_frames_failed/a_frames_decoded*100 AS "a", v_frames_failed/v_frames_decoded*100 AS "v" FROM data');?>
       <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
       <?php 
       while ($result = mysqli_fetch_array($sql)) {
-        echo "<tr><td>{$result['IP']}</td><td>{$result['f_name']}</td><td>{$result['f_speed']}</td><td>{$result['timestamp']}</td><td>{$result['a']}</td><td>{$result['v']}</td></tr>";
+        echo "<tr><td>".long2ip($result['IP'])."</td><td>{$result['f_name']}</td><td>{$result['f_speed']}</td><td>{$result['time']}</td><td>{$result['a']}</td><td>{$result['v']}</td></tr>";
       }
   ?>
 </body>
@@ -64,4 +64,3 @@
   }
 </style>
 </html>
-
