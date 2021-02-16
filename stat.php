@@ -2,7 +2,7 @@
 require_once "config.php";
 __log( $_SERVER['REMOTE_ADDR']);
 $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-$content = json_decode(file_get_contents('php://input'), true);
+$content = json_decode(file_get_contents('iptv.json'), true);
 $IP = ip2long($_SERVER['REMOTE_ADDR']);
 switch ($content['0']['type']) {
     case 'media':
@@ -49,11 +49,11 @@ $sent_bytes = $content[$y]['stat']['sent_bytes'];
 $sent_error_packets = $content[$y]['stat']['sent_error_packets'];
 $sent_total_packets = $content[$y]['stat']['sent_total_packets'];
 $timestamp = $content[$y]['timestamp'];
-$type = $content[$y]['type'];
+$type_net = $content[$y]['type'];
 $query = "INSERT INTO data (begin, end, adaptive_bandwidth, a_frames_decoded, a_frames_dropped, a_frames_failed, avg_bitrate, id, timestamp, v_frames_decoded, v_frames_dropped, v_frames_failed, type, discontinuties, IP,
   duplex, gateway, IP_inner, name, netmask, speed, received_bytes, received_discard_packets, received_error_packets, received_multicast_packets, received_total_packets, sent_bytes, sent_error_packets, sent_total_packets,timestamp_net, type_net)
 VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dropped', '$a_frames_failed','$avg_bitrate', '$id', '$timestamp', '$v_frames_decoded', '$v_frames_dropped', '$v_frames_failed','$type','$discontinuties', '$IP',
- '$duplex','$gateway','$ip_inner','$name','$netmask','$speed','$received_bytes','$received_discard_packets','$received_error_packets','$received_multicast_packets','$received_total_packets','$sent_bytes','$sent_error_packets','$sent_total_packets','$timestamp','$type')";
+ '$duplex','$gateway','$ip_inner','$name','$netmask','$speed','$received_bytes','$received_discard_packets','$received_error_packets','$received_multicast_packets','$received_total_packets','$sent_bytes','$sent_error_packets','$sent_total_packets','$timestamp','$type_net')";
 __log($query);
 $connect = mysqli_connect($db_host,$db_user,$db_pass,$db_name);
 mysqli_query($connect,$query);
