@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `data` (
-  `IP` bigint(20) NOT NULL,
+  `IP` int(11) NOT NULL,
   `adaptive_bandwidth` int(11) NOT NULL,
   `a_frames_decoded` int(11) NOT NULL,
   `a_frames_dropped` int(11) NOT NULL,
