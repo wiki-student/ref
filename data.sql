@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Фев 12 2021 г., 18:40
+-- Время создания: Фев 16 2021 г., 12:15
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.13
 
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `data` (
-  `Remote_IP` text NOT NULL,
+  `Remote_IP` bigint(20) NOT NULL,
   `adaptive_bandwidth` int(11) NOT NULL,
   `a_frames_decoded` int(11) NOT NULL,
   `a_frames_dropped` int(11) NOT NULL,
