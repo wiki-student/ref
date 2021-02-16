@@ -2,7 +2,7 @@
 require_once "config.php";
 __log( $_SERVER['REMOTE_ADDR']);
 $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-$content = json_decode(file_get_contents('php://input'), true);
+$content = json_decode(file_get_contents('IPTV.json'), true);
 $IP = ip2long($_SERVER['REMOTE_ADDR']);
 switch ($content['0']['type']) {
     case 'media':
@@ -35,10 +35,10 @@ $v_frames_failed = $content[$x]['video']['frames_failed'];
 $type = $content[$x]['type'];
 $discontinuties = $content[$x]['discontinuties'];
 $duplex = $content[$y]['duplex'];
-$gateway = $content[$y]['gateway'];
-$ip = $content[$y]['ip'];
+$gateway = ip2long($content[$y]['gateway']);
+$ip_net = ip2long($content[$y]['ip']);
 $name = $content[$y]['name'];
-$netmask = $content[$y]['netmask'];
+$netmask = ip2long($content[$y]['netmask']);
 $speed = $content[$y]['speed'];
 $received_bytes = $content[$y]['stat']['received_bytes'];
 $received_discard_packets = $content[$y]['stat']['received_discard_packets'];
@@ -51,9 +51,9 @@ $sent_total_packets = $content[$y]['stat']['sent_total_packets'];
 $timestamp = $content[$y]['timestamp'];
 $type = $content[$y]['type'];
 $query = "INSERT INTO data (begin, end, adaptive_bandwidth, a_frames_decoded, a_frames_dropped, a_frames_failed, avg_bitrate, id, timestamp, v_frames_decoded, v_frames_dropped, v_frames_failed, type, discontinuties, IP,
-  f_duplex, f_gateway, f_ip, f_name, f_netmask, f_speed, f_s_received_bytes, f_s_received_discard_packets, f_s_received_error_packets, f_s_received_multicast_packets, f_s_received_total_packets, f_s_sent_bytes, f_s_sent_error_packets, f_s_sent_total_packets,f_timestamp, f_type)
+  duplex, gateway, IP_net, name, netmask, speed, received_bytes, received_discard_packets, received_error_packets, received_multicast_packets, received_total_packets, sent_bytes, sent_error_packets, sent_total_packets,timestamp_net, type_net)
 VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dropped', '$a_frames_failed','$avg_bitrate', '$id', '$timestamp', '$v_frames_decoded', '$v_frames_dropped', '$v_frames_failed','$type','$discontinuties', '$IP',
- '$duplex','$gateway','$ip','$name','$netmask','$speed','$received_bytes','$received_discard_packets','$received_error_packets','$received_multicast_packets','$received_total_packets','$sent_bytes','$sent_error_packets','$sent_total_packets','$timestamp','$type')";
+ '$duplex','$gateway','$ip_net','$name','$netmask','$speed','$received_bytes','$received_discard_packets','$received_error_packets','$received_multicast_packets','$received_total_packets','$sent_bytes','$sent_error_packets','$sent_total_packets','$timestamp','$type')";
 __log($query);
 $connect = mysqli_connect($db_host,$db_user,$db_pass,$db_name);
 mysqli_query($connect,$query);
