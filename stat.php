@@ -14,6 +14,7 @@ $begin = $m_content['begin'];
 $end = $m_content['end'];
 $a_frames_decoded = $m_content['audio']['frames_decoded'];
 $a_frames_dropped = $m_content['audio']['frames_dropped'];
+$url = $m_content['url'];
 $a_frames_failed = $m_content['audio']['frames_failed'];
 $avg_bitrate = $m_content['avg_bitrate'];
 $id = $m_content['id'];
@@ -39,9 +40,9 @@ $sent_error_packets = $n_content['stat']['sent_error_packets'];
 $sent_total_packets = $n_content['stat']['sent_total_packets'];
 $timestamp = $n_content['timestamp'];
 $type_net = $n_content['type'];
-$query = "INSERT INTO data (begin, end, adaptive_bandwidth, a_frames_decoded, a_frames_dropped, a_frames_failed, avg_bitrate, id, timestamp, v_frames_decoded, v_frames_dropped, v_frames_failed, type, discontinuties, IP,
+$query = "INSERT INTO data (begin, end, adaptive_bandwidth, a_frames_decoded, a_frames_dropped, a_frames_failed, avg_bitrate, id, timestamp, v_frames_decoded, v_frames_dropped, v_frames_failed, type, discontinuties, IP, url,
   duplex, gateway, IP_inner, name, netmask, speed, received_bytes, received_discard_packets, received_error_packets, received_multicast_packets, received_total_packets, sent_bytes, sent_error_packets, sent_total_packets,timestamp_net, type_net)
-VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dropped', '$a_frames_failed','$avg_bitrate', '$id', '$timestamp', '$v_frames_decoded', '$v_frames_dropped', '$v_frames_failed','$type','$discontinuties', '$IP',
+VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dropped', '$a_frames_failed','$avg_bitrate', '$id', '$timestamp', '$v_frames_decoded', '$v_frames_dropped', '$v_frames_failed','$type','$discontinuties', '$IP', '$url',
  '$duplex','$gateway','$ip_inner','$name','$netmask','$speed','$received_bytes','$received_discard_packets','$received_error_packets','$received_multicast_packets','$received_total_packets','$sent_bytes','$sent_error_packets','$sent_total_packets','$timestamp','$type_net')";
 __log($query);
 $connect = mysqli_connect($db_host,$db_user,$db_pass,$db_name);
