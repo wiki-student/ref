@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Фев 16 2021 г., 19:33
+-- Время создания: Фев 17 2021 г., 16:26
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.13
 
@@ -37,10 +37,8 @@ CREATE TABLE IF NOT EXISTS `data` (
   `discontinuties` int(11) NOT NULL,
   `end` int(11) NOT NULL,
   `id` int(11) NOT NULL,
-  `proto` text NOT NULL,
   `timestamp` int(11) NOT NULL,
   `type` text NOT NULL,
-  `url` text NOT NULL,
   `v_frames_decoded` int(11) NOT NULL,
   `v_frames_dropped` int(11) NOT NULL,
   `v_frames_failed` int(11) NOT NULL,
