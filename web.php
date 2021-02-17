@@ -14,14 +14,16 @@
         echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . ', error: ' . mysqli_connect_error();
         exit;
       }
-      $sql = mysqli_query($link, 'SELECT IP, name, speed, FROM_UNIXTIME(timestamp) AS time, a_frames_failed/a_frames_decoded*100 AS "a", v_frames_failed/v_frames_decoded*100 AS "v" FROM data LIMIT 500');
-      $count = mysqli_query($link, 'SELECT * FROM data');?>
+      $result = mysqli_query($link, 'SELECT IP, name, speed, FROM_UNIXTIME(timestamp) AS time, a_frames_failed/a_frames_decoded*100 AS "a", v_frames_failed/v_frames_decoded*100 AS "v" FROM data LIMIT 500');
+      $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');?>
       <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
       <?php 
-      while ($result = mysqli_fetch_array($sql)) {
-        echo "<tr><td>".long2ip($result['IP'])."</td><td>{$result['name']}</td><td>{$result['speed']}</td><td>{$result['time']}</td><td>{$result['a']}</td><td>{$result['v']}</td></tr>";
-      };?>
-      <span>Total number of rows: <?php print_r ($count->num_rows);?></span>
+      while ($row = mysqli_fetch_array($result)) {
+        echo "<tr><td>".long2ip($row['IP'])."</td><td>{$row['name']}</td><td>{$row['speed']}</td><td>{$row['time']}</td><td>{$row['a']}</td><td>{$row['v']}</td></tr>";
+      };
+        $row= $r_count->fetch_array();
+        echo "Total number of rows:".$row[0]."<br>";?>
+      
     </table>
 </body>
 <style>
@@ -36,7 +38,7 @@
     border-radius: 10px;
     border-spacing: 0;
     text-align: center;
-    margin:-21px auto 0 auto;
+    margin:-17px auto 0 auto;
     }
     th {
     background: #BCEBDD;
@@ -62,14 +64,6 @@
     }
     tr td:last-child {
     border-right: none;
-    }
-    span{
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    font-size: 14px;
-    position: sticky;
-    top:0px;
-    background-color:#BCEBDD;
-    padding: 10px 5px;    
     }
 </style>
 </html>
