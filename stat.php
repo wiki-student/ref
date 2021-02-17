@@ -2,54 +2,43 @@
 require_once "config.php";
 __log( $_SERVER['REMOTE_ADDR']);
 $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-$content = json_decode(file_get_contents('iptv.json'), true);
+$content = json_decode(file_get_contents('php://input'),true);
 $IP = ip2long($_SERVER['REMOTE_ADDR']);
-switch ($content['0']['type']) {
-    case 'media':
-      $x=0;
-       break;}
-switch ($content['0']['type']) {
-    case 'network':
-       if ($content['0']['stat']['received_bytes'] >0) $y=0;
-       break;}
-switch ($content['1']['type']) {
-    case 'network':
-       if ($content['1']['stat']['received_bytes'] >0) $y=1;
-       break;}
-switch ($content['2']['type']) {
-    case 'network':
-       if ($content['2']['stat']['received_bytes'] >0) $y=2;
-       break;}
-$adaptive_bandwidth = $content[$x]['adaptive_bandwidth'];
-$begin = $content[$x]['begin'];
-$end = $content[$x]['end'];
-$a_frames_decoded = $content[$x]['audio']['frames_decoded'];
-$a_frames_dropped = $content[$x]['audio']['frames_dropped'];
-$a_frames_failed = $content[$x]['audio']['frames_failed'];
-$avg_bitrate = $content[$x]['avg_bitrate'];
-$id = $content[$x]['id'];
-$timestamp = $content[$x]['timestamp'];
-$v_frames_decoded = $content[$x]['video']['frames_decoded'];
-$v_frames_dropped = $content[$x]['video']['frames_dropped'];
-$v_frames_failed = $content[$x]['video']['frames_failed'];
-$type = $content[$x]['type'];
-$discontinuties = $content[$x]['discontinuties'];
-$duplex = $content[$y]['duplex'];
-$gateway = ip2long($content[$y]['gateway']);
-$ip_inner = ip2long($content[$y]['ip']);
-$name = $content[$y]['name'];
-$netmask = ip2long($content[$y]['netmask']);
-$speed = $content[$y]['speed'];
-$received_bytes = $content[$y]['stat']['received_bytes'];
-$received_discard_packets = $content[$y]['stat']['received_discard_packets'];
-$received_error_packets = $content[$y]['stat']['received_error_packets'];
-$received_multicast_packets = $content[$y]['stat']['received_multicast_packets'];
-$received_total_packets = $content[$y]['stat']['received_total_packets'];
-$sent_bytes = $content[$y]['stat']['sent_bytes'];
-$sent_error_packets = $content[$y]['stat']['sent_error_packets'];
-$sent_total_packets = $content[$y]['stat']['sent_total_packets'];
-$timestamp = $content[$y]['timestamp'];
-$type_net = $content[$y]['type'];
+$x = -1;
+while ($x++<10):
+  if ($content[$x]['type']=='media') $m_content = $content[$x];
+  elseif ($content[$x]['type']=='network'&& $content[$x]['stat']['received_bytes']>0) $n_content = $content[$x];
+endwhile;
+$adaptive_bandwidth = $m_content['adaptive_bandwidth'];
+$begin = $m_content['begin'];
+$end = $m_content['end'];
+$a_frames_decoded = $m_content['audio']['frames_decoded'];
+$a_frames_dropped = $m_content['audio']['frames_dropped'];
+$a_frames_failed = $m_content['audio']['frames_failed'];
+$avg_bitrate = $m_content['avg_bitrate'];
+$id = $m_content['id'];
+$timestamp = $m_content['timestamp'];
+$v_frames_decoded = $m_content['video']['frames_decoded'];
+$v_frames_dropped = $m_content['video']['frames_dropped'];
+$v_frames_failed = $m_content['video']['frames_failed'];
+$type = $m_content['type'];
+$discontinuties = $m_content['discontinuties'];
+$duplex = $n_content['duplex'];
+$gateway = ip2long($n_content['gateway']);
+$ip_inner = ip2long($n_content['ip']);
+$name = $n_content['name'];
+$netmask = ip2long($n_content['netmask']);
+$speed = $n_content['speed'];
+$received_bytes = $n_content['stat']['received_bytes'];
+$received_discard_packets = $n_content['stat']['received_discard_packets'];
+$received_error_packets = $n_content['stat']['received_error_packets'];
+$received_multicast_packets = $n_content['stat']['received_multicast_packets'];
+$received_total_packets = $n_content['stat']['received_total_packets'];
+$sent_bytes = $n_content['stat']['sent_bytes'];
+$sent_error_packets = $n_content['stat']['sent_error_packets'];
+$sent_total_packets = $n_content['stat']['sent_total_packets'];
+$timestamp = $n_content['timestamp'];
+$type_net = $n_content['type'];
 $query = "INSERT INTO data (begin, end, adaptive_bandwidth, a_frames_decoded, a_frames_dropped, a_frames_failed, avg_bitrate, id, timestamp, v_frames_decoded, v_frames_dropped, v_frames_failed, type, discontinuties, IP,
   duplex, gateway, IP_inner, name, netmask, speed, received_bytes, received_discard_packets, received_error_packets, received_multicast_packets, received_total_packets, sent_bytes, sent_error_packets, sent_total_packets,timestamp_net, type_net)
 VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dropped', '$a_frames_failed','$avg_bitrate', '$id', '$timestamp', '$v_frames_decoded', '$v_frames_dropped', '$v_frames_failed','$type','$discontinuties', '$IP',
