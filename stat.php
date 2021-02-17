@@ -5,10 +5,12 @@ $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
 $content = json_decode(file_get_contents('php://input'),true);
 $IP = ip2long($_SERVER['REMOTE_ADDR']);
 $x = -1;
-while ($x++<10):
-  if ($content[$x]['type']=='media') $m_content = $content[$x];
+$y = 0;
+while ($x++<5):
+  if ($content[$x]['type']=='media') {$m_content = $content[$x]; $y++;}
   elseif ($content[$x]['type']=='network'&& $content[$x]['stat']['received_bytes']>0) $n_content = $content[$x];
 endwhile;
+if ($y<2) {
 $adaptive_bandwidth = $m_content['adaptive_bandwidth'];
 $begin = $m_content['begin'];
 $end = $m_content['end'];
@@ -47,7 +49,7 @@ VALUES('$begin', '$end','$adaptive_bandwidth','$a_frames_decoded', '$a_frames_dr
 __log($query);
 $connect = mysqli_connect($db_host,$db_user,$db_pass,$db_name);
 mysqli_query($connect,$query);
-mysqli_close($connect);
+mysqli_close($connect);}
 function __log($msg) {
   error_log(date("Y-m-d H:i:s")."   ".$msg."\n",3,"/tmp/stb_stat.log");}
 ?>
