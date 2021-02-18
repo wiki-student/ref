@@ -16,7 +16,7 @@
       }
       $result = mysqli_query($link, 'SELECT IP, name, speed, FROM_UNIXTIME(timestamp) AS time, a_frames_failed/a_frames_decoded*100 AS "a", v_frames_failed/v_frames_decoded*100 AS "v" FROM data LIMIT 500');
       $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');
-      $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) as count_uniq_ip FROM data');?>
+      $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) FROM data');?>
       <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
       <?php
       while ($row = mysqli_fetch_array($result)) {
