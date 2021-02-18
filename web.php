@@ -6,8 +6,8 @@
     <title>Page Title</title>
 </head>
 <body>
-  <table>   
-    <?php 
+  <table>
+    <?php
     require_once("config.php");
     $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
     if (!$link) {
@@ -15,15 +15,18 @@
         exit;
       }
       $result = mysqli_query($link, 'SELECT IP, name, speed, FROM_UNIXTIME(timestamp) AS time, a_frames_failed/a_frames_decoded*100 AS "a", v_frames_failed/v_frames_decoded*100 AS "v" FROM data LIMIT 500');
-      $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');?>
+      $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');
+      $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) as count_uniq_ip FROM data');?>
       <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
-      <?php 
+      <?php
       while ($row = mysqli_fetch_array($result)) {
         echo "<tr><td>".long2ip($row['IP'])."</td><td>{$row['name']}</td><td>{$row['speed']}</td><td>{$row['time']}</td><td>{$row['a']}</td><td>{$row['v']}</td></tr>";
       };
         $row= $r_count->fetch_array();
-        echo "Total number of rows:".$row[0]."<br>";?>
-      
+        echo "Total number of rows:".$row[0]."<br>";
+        $row= $uniq_IP->fetch_array();
+        echo "Unique IP:".$row[0]."<br>";?>
+
     </table>
 </body>
 <style>
