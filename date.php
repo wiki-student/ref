@@ -22,11 +22,11 @@
       function errors($a,$b){
         return round($a/$b*100,5);
       }
-      function time1($t){
+      function timetranslation($t){
         return date('Y-m-d H:i:s',$t);
       }      
       while ($row = mysqli_fetch_array($result)) {
-        echo "<tr><td>".long2ip($row['IP'])."</td><td>{$row['name']}</td><td>{$row['speed']}</td><td>".time1($row['timestamp'])."</td>
+        echo "<tr><td>".long2ip($row['IP'])."</td><td>{$row['name']}</td><td>{$row['speed']}</td><td>".timetranslation($row['timestamp'])."</td>
         <td>".errors($row['a_frames_failed'],$row['a_frames_decoded'])."</td><td>".errors($row['v_frames_failed'],$row['v_frames_decoded'])."</td></tr>";
       };
     ?>
