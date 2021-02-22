@@ -16,7 +16,7 @@
         echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . ', error: ' . mysqli_connect_error();
         exit;
       };
-      $result = mysqli_query($link, 'SELECT *FROM `data` WHERE  `timestamp`>= '.$from.' AND `timestamp`<= '.$to.'');?>
+      $result = mysqli_query($link, 'SELECT *FROM `data` WHERE  `timestamp`<= '.$from.' AND `timestamp`>= '.$to.'');?>
       <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
       <?php 
       function errors($a,$b){
