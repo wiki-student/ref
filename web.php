@@ -7,6 +7,11 @@
 </head>
 <body>
   <table>
+  <form action="date.php" method="post">
+      <p>From: <input type="text" name="from" placeholder="2021-02-10 17:11:03"/></p>
+      <p>To: <input type="text" name="to" placeholder="2021-04-11 21:33:33"/></p>
+      <p><input type="submit"/></p>
+  </form>  
     <?php
     require_once("config.php");
     $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
