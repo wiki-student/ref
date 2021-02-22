@@ -20,7 +20,11 @@
       <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
       <?php 
       function errors($a,$b){
+        if ($b==0){
+          return 0;
+        } else {
         return round($a/$b*100,5);
+        }
       }
       function timetranslation($t){
         return date('Y-m-d H:i:s',$t);
