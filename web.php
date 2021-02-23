@@ -7,30 +7,55 @@
 </head>
 <body>
   <table>
-  <form action="date.php" method="post">
+  <form action="web.php" method="post">
       <p>From: <input type="text" name="from" placeholder="2021-02-10 17:11:03"/></p>
       <p>To: <input type="text" name="to" placeholder="2021-04-11 21:33:33"/></p>
       <p><input type="submit"/></p>
   </form>  
     <?php
     require_once("config.php");
-    $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-    if (!$link) {
+    $from =strtotime($_POST['from']);
+    $to = strtotime($_POST['to']);
+    if($from<>'')
+    {
+      $result = mysqli_query($link, 'SELECT *FROM `data` WHERE  `timestamp`>= '.$from.' AND `timestamp`<= '.$to.'');?>
+      <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
+      <?php 
+      function errors($a,$b){
+        if ($b==0){
+          return 0;
+        } else {
+        return round($a/$b*100,5);
+        }
+      }
+      function timetranslation($t){
+        return date('Y-m-d H:i:s',$t);
+      }      
+      while ($row = mysqli_fetch_array($result)) {
+        echo "<tr><td>".long2ip($row['IP'])."</td><td>{$row['name']}</td><td>{$row['speed']}</td><td>".timetranslation($row['timestamp'])."</td>
+        <td>".errors($row['a_frames_failed'],$row['a_frames_decoded'])."</td><td>".errors($row['v_frames_failed'],$row['v_frames_decoded'])."</td></tr>";
+      };
+    }else
+    {
+        $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+        if (!$link) {
         echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . ', error: ' . mysqli_connect_error();
         exit;
-      }
-      $result = mysqli_query($link, 'SELECT IP, name, speed, FROM_UNIXTIME(timestamp) AS time, a_frames_failed/a_frames_decoded*100 AS "a", v_frames_failed/v_frames_decoded*100 AS "v" FROM data LIMIT 500');
-      $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');
-      $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) FROM data');?>
-      <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
-      <?php
-      while ($row = mysqli_fetch_array($result)) {
+        }
+        $result = mysqli_query($link, 'SELECT IP, name, speed, FROM_UNIXTIME(timestamp) AS time, a_frames_failed/a_frames_decoded*100 AS "a", v_frames_failed/v_frames_decoded*100 AS "v" FROM data LIMIT 500');
+        $r_count = mysqli_query($link, 'SELECT count(IP) FROM data ');
+        $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) FROM data ');?>
+        <tr><th>IP</th><th>Network Name</th><th>Network speed</th><th>Timestamp</th><th>Audio errors</th><th>Video errors</th></tr>
+        <?php
+        while ($row = mysqli_fetch_array($result)) {
         echo "<tr><td>".long2ip($row['IP'])."</td><td>{$row['name']}</td><td>{$row['speed']}</td><td>{$row['time']}</td><td>{$row['a']}</td><td>{$row['v']}</td></tr>";
       };
         $row= $r_count->fetch_array();
         echo "Total number of rows:".$row[0]."<br>";
         $row= $uniq_IP->fetch_array();
-        echo "Unique IP:".$row[0]."<br>";?>
+        echo "Unique IP:".$row[0]."<br>";
+    }
+    ?>
 
     </table>
 </body>
