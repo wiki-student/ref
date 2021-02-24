@@ -17,7 +17,11 @@
     $from =strtotime($_POST['from']);
     $to = strtotime($_POST['to']);
     function cutletters($l){
-      return str_replace("index.m3u8"," ",substr($l,7));
+      if (strlen($l)>75){        
+        return(preg_replace("/^(.+?)\?.+$/", '\\1', substr($l,0,75)). '...');
+      }else{
+        return(preg_replace("/^(.+?)\?.+$/", '\\1', substr($l,7)));
+      }
     }  
     if($from<>'')
     { 
@@ -79,13 +83,13 @@
     font-size: 14px;
     border-radius: 10px;
     border-spacing: 0;
-    text-align: center;
+    text-align: left;
     margin:10px auto 0 auto;
     }
     th {
     background: #BCEBDD;
     color: black;
-    padding: 10px 20px;
+    padding: 10px 10px;
     position: sticky;
     top:0px;
     }
