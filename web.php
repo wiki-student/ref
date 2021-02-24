@@ -17,7 +17,7 @@
     $from =strtotime($_POST['from']);
     $to = strtotime($_POST['to']);
     function cutletters($l){
-      return substr($l,7);
+      return str_replace("index.m3u8"," ",substr($l,7));
     }  
     if($from<>'')
     { 
