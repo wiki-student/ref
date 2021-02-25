@@ -17,10 +17,12 @@
       $to = strtotime($_POST['to']);
       function cutletters($l)
       {
+        $l = str_replace("http://","",$l);
+        $l = str_replace("index.m3u8","",$l);
         if (strlen($l)>75){        
-          return(preg_replace("/^(.+?)\?.+$/", '\\1', substr($l,0,75)). '...');
+          return(preg_replace("/^(.+?)\?.+$/", '\\1', substr($l,0,75)).'...');
         }else{
-          return(preg_replace("/^(.+?)\?.+$/", '\\1', substr($l,7)));
+          return(preg_replace("/^(.+?)\?.+$/", '\\1', $l));
         }
       }  
       if($from<>'')
