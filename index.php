@@ -9,18 +9,8 @@
       <form action="web.php" method="post">
         From: <input type="text" name="from"/>
         To: <input type="text" name="to"/>
-        <input type="submit"/>
-      </form>
-    </p>
-    <p>
-      <form action="web.php" method="post">
         IP: <input type="text" name="ip"/>
         <input type="submit"/>
-      </form>
-    </p>
-    <p>
-      <form action="web.php">
-        <button type="submit">View all the data</button>
       </form>
     </p>
     <?php
@@ -28,8 +18,7 @@
       $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
       if (!$link) 
       {
-      echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '
-        , error: ' . mysqli_connect_error();
+      echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '';
         exit;
       }
       $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');
