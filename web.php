@@ -10,11 +10,16 @@
       <p>From: <input type="text" name="from"/></p>
       <p>To: <input type="text" name="to"/></p>
       <p><input type="submit"/></p>
-    </form>  
+    </form>
+    <form action="web.php" method="post">
+      <p>IP: <input type="text" name="ip"/></p>
+      <p><input type="submit"/></p>
+    </form>    
     <?php
       require_once("config.php");
       $from =strtotime($_POST['from']);
       $to = strtotime($_POST['to']);
+      $ip = ip2long($_POST['ip']);
       function cutletters($l)
       {
         $l = str_replace("http://","",$l);
@@ -71,8 +76,53 @@
             <td>".cutletters($row['url'])."</td>
           </tr>";
         };
-      }else
-      {
+      }elseif($ip<>'')
+        { 
+          $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+            if (!$link) 
+            {
+            echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '
+            , error: ' . mysqli_connect_error();
+            exit;
+            }
+          $sql= 'SELECT *FROM data WHERE IP= '.$ip.' limit 500';
+          $result = mysqli_query($link, $sql);
+      ?>
+          <tr>
+              <th>IP</th>
+              <th>Network Name</th>
+              <th>Network speed</th>
+              <th>Timestamp</th>
+              <th>Audio errors</th>
+              <th>Video errors</th>
+              <th>URL</th>
+          </tr>
+      <?php 
+          function errors($a,$b)
+          {
+            if ($b==0){
+              return 0;
+            } else {
+            return round($a/$b*100,5);
+            }
+          }
+          function timetranslation($t)
+          {
+            return date('Y-m-d H:i:s',$t);
+          }         
+          while ($row = mysqli_fetch_array($result))
+          {
+            echo "<tr>
+              <td>".long2ip($row['IP'])."</td>
+              <td>{$row['name']}</td>
+              <td>{$row['speed']}</td>
+              <td>".timetranslation($row['timestamp'])."</td>
+              <td>".errors($row['a_frames_failed'],$row['a_frames_decoded'])."</td>
+              <td>".errors($row['v_frames_failed'],$row['v_frames_decoded'])."</td>
+              <td>".cutletters($row['url'])."</td>
+            </tr>";
+          };
+      }else{
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
         if (!$link) 
         {
