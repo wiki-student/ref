@@ -2,19 +2,10 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>Page Title</title>
+    <title>Audio/video errors</title>
 </head>
 <body>
   <table>
-    <form action="web.php" method="post">
-      <p>From: <input type="text" name="from"/></p>
-      <p>To: <input type="text" name="to"/></p>
-      <p><input type="submit"/></p>
-    </form>
-    <form action="web.php" method="post">
-      <p>IP: <input type="text" name="ip"/></p>
-      <p><input type="submit"/></p>
-    </form>    
     <?php
       require_once("config.php");
       $from =strtotime($_POST['from']);
@@ -35,11 +26,10 @@
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
           if (!$link) 
           {
-          echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '
-          , error: ' . mysqli_connect_error();
+          echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '';
           exit;
           }
-        $sql= 'SELECT *FROM data WHERE timestamp>= '.$from.' AND timestamp<= '.$to.'';
+        $sql= 'SELECT *FROM data WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' limit 500';
         $result = mysqli_query($link, $sql);
     ?>
         <tr>
@@ -81,8 +71,7 @@
           $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
             if (!$link) 
             {
-            echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '
-            , error: ' . mysqli_connect_error();
+            echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '';
             exit;
             }
           $sql= 'SELECT *FROM data WHERE IP= '.$ip.' limit 500';
@@ -126,8 +115,7 @@
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
         if (!$link) 
         {
-          echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '
-          , error: ' . mysqli_connect_error();
+          echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '';
           exit;
         }
         $sql='SELECT IP,
