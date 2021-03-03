@@ -21,15 +21,24 @@
           return(preg_replace("/^(.+?)\?.+$/", '\\1', $l));
         }
       }  
-      if($from<>'')
+      if($from<>'' || $to<>'' || $ip<>'')
       { 
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
           if (!$link) 
           {
           echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '';
           exit;
-          }
-        $sql= 'SELECT *FROM data WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' limit 500';
+          }   
+        if($from==''){
+          $from=1;
+        }
+        if($to==''){
+          $to=time();
+        }
+        if($ip==''){
+          $sql= 'SELECT * FROM data WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' limit 500';          
+        }else{  
+        $sql= 'SELECT *FROM data WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' AND IP= '.$ip.' limit 500';}
         $result = mysqli_query($link, $sql);
     ?>
         <tr>
@@ -66,51 +75,6 @@
             <td>".cutletters($row['url'])."</td>
           </tr>";
         };
-      }elseif($ip<>'')
-        { 
-          $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-            if (!$link) 
-            {
-            echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '';
-            exit;
-            }
-          $sql= 'SELECT *FROM data WHERE IP= '.$ip.' limit 500';
-          $result = mysqli_query($link, $sql);
-      ?>
-          <tr>
-              <th>IP</th>
-              <th>Network Name</th>
-              <th>Network speed</th>
-              <th>Timestamp</th>
-              <th>Audio errors</th>
-              <th>Video errors</th>
-              <th>URL</th>
-          </tr>
-      <?php 
-          function errors($a,$b)
-          {
-            if ($b==0){
-              return 0;
-            } else {
-            return round($a/$b*100,5);
-            }
-          }
-          function timetranslation($t)
-          {
-            return date('Y-m-d H:i:s',$t);
-          }         
-          while ($row = mysqli_fetch_array($result))
-          {
-            echo "<tr>
-              <td>".long2ip($row['IP'])."</td>
-              <td>{$row['name']}</td>
-              <td>{$row['speed']}</td>
-              <td>".timetranslation($row['timestamp'])."</td>
-              <td>".errors($row['a_frames_failed'],$row['a_frames_decoded'])."</td>
-              <td>".errors($row['v_frames_failed'],$row['v_frames_decoded'])."</td>
-              <td>".cutletters($row['url'])."</td>
-            </tr>";
-          };
       }else{
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
         if (!$link) 
