@@ -23,17 +23,10 @@
       }
       $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');
       $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) FROM data ');
-      $top = mysqli_query($link, 'SELECT url, COUNT(*) FROM data GROUP BY url order BY COUNT(*) DESC');
       $row= $r_count->fetch_array();      
       echo "Total number of rows:".$row[0]."<br>";
       $row= $uniq_IP->fetch_array();
       echo "Unique IP:".$row[0]."<br>";
-      while($i<=4){
-        $row= mysqli_fetch_array($top);        
-        echo $row['COUNT(*)'].' ';
-        echo $row['url']."<br>";
-        $i++;
-      }
     ?>
 </body>
 </html>
