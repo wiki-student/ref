@@ -20,7 +20,7 @@
       $row= $uniq_IP->fetch_array();
       echo "Unique IP:".$row[0]."<br>";
     ?>
-    <a href="web.php">Full table</a></br>
+    <a href="web.php">Audio/video errors</a></br>
     <a href="top.php">Top</a>
 </body>
 </html>
