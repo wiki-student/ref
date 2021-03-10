@@ -6,8 +6,16 @@
 </head>
 <body>
   <table>
+    <p>
+      <form action="web.php" method="post">
+        From: <input type="datetime-local" name="from"/>
+        To: <input type="datetime-local" name="to"/>
+        IP: <input type="text" name="ip"/>
+        <input type="submit"/>
+      </form>
+    </p>
     <?php
-      require_once("config.php");
+      require_once("config.php");      
       $from =strtotime($_POST['from']);
       $to = strtotime($_POST['to']);
       $ip = ip2long($_POST['ip']);
@@ -37,25 +45,13 @@
         }
         if($ip==''){
           $sql= 'SELECT * FROM data 
-            WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' limit 500';
-          $top = mysqli_query($link, 'SELECT url, COUNT(*) FROM data 
-            WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' 
-            GROUP BY url order BY COUNT(*) DESC');          
+          WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' limit 500';
         }else{  
           $sql= 'SELECT *FROM data 
-            WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' AND IP= '.$ip.' limit 500';
-          $top = mysqli_query($link, 'SELECT url, COUNT(*) FROM data 
-            WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' AND IP= '.$ip.' 
-            GROUP BY url order BY COUNT(*) DESC');}
-        echo 'Top sites:'."</br>";
-        while($i<=4){
-          $row= mysqli_fetch_array($top);        
-          echo $row['COUNT(*)'].' ';
-          echo $row['url']."<br>";
-          $i++;
+          WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' AND IP= '.$ip.' limit 500';
         }
         $result = mysqli_query($link, $sql);
-    ?>
+        ?>
         <tr>
             <th>IP</th>
             <th>Network Name</th>
@@ -65,7 +61,7 @@
             <th>Video errors</th>
             <th>URL</th>
         </tr>
-    <?php 
+        <?php 
         function errors($a,$b)
         {
           if ($b==0){
@@ -90,7 +86,8 @@
             <td>".cutletters($row['url'])."</td>
           </tr>";
         };
-      }else{
+      }else
+      {
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
         if (!$link) 
         {
@@ -107,8 +104,6 @@
               FROM data 
               LIMIT 500';
         $result = mysqli_query($link, $sql);
-        $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');
-        $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) FROM data ');
     ?>
         <tr>
           <th>IP</th>
@@ -130,10 +125,6 @@
             <td>".cutletters($row['url'])."</td>
           </tr>";
         };
-        $row= $r_count->fetch_array();
-        echo "Total number of rows:".$row[0]."<br>";
-        $row= $uniq_IP->fetch_array();
-        echo "Unique IP:".$row[0]."<br>";
       }
     ?>
   </table>
@@ -143,6 +134,7 @@
     margin: 0;
     padding:0;
     box-sizing: border-box;
+    background: #BCEBDD;
     }
     table {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
@@ -161,7 +153,7 @@
     }
     th, td {
     border-style: solid;
-    border-width: 0 1px 1px 0;
+    border-width: 1px 1px 1px 0;
     border-color: white;
     }
     th:first-child, td:first-child {
