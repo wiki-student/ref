@@ -2,17 +2,9 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>Page Title</title>
+    <title>Index</title>
 </head>
-<body>
-    <p>
-      <form action="web.php" method="post">
-        From: <input type="datetime-local" name="from"/>
-        To: <input type="datetime-local" name="to"/>
-        IP: <input type="text" name="ip"/>
-        <input type="submit"/>
-      </form>
-    </p>
+<body>    
     <?php
       require_once("config.php");      
       $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
@@ -20,7 +12,7 @@
       {
       echo 'I can not connect to the database. Error code: ' . mysqli_connect_error() . '';
         exit;
-      }
+      };
       $r_count = mysqli_query($link, 'SELECT count(IP) FROM data');
       $uniq_IP = mysqli_query($link, 'SELECT count(DISTINCT IP) FROM data ');
       $row= $r_count->fetch_array();      
@@ -28,5 +20,7 @@
       $row= $uniq_IP->fetch_array();
       echo "Unique IP:".$row[0]."<br>";
     ?>
+    <a href="web.php">Full table</a></br>
+    <a href="top.php">Top</a>
 </body>
 </html>
