@@ -110,6 +110,14 @@
     __log($query);
     $connect = mysqli_connect($db_host,$db_user,$db_pass,$db_name);
     mysqli_query($connect,$query);
+    $memcache = new Memcache;
+    $memcache->connect('localhost', 11211);
+    if ($memcache->get($url)){
+        return $url;
+      }else{
+        $id_incr = mysqli_insert_id($connect);
+        $memcache -> set($url,$id_incr);
+      }
     mysqli_close($connect);
   }
     function __log($msg) 
