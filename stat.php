@@ -11,14 +11,28 @@
     elseif ($content[$x]['type']=='network'&& $content[$x]['stat']
     ['received_bytes']>0) $n_content = $content[$x];
   endwhile;
-  if ($y<2) 
+  if ($y<2){
+   $url = $m_content['url'];
+   $memcache = new Memcache;
+   $memcache->connect('localhost', 11211);
+   $url_id = ($memcache->get($url));
+   if ($url_id<>0){
+     }else{
+        $query_mem = "INSERT into Url_Id (url) Values('$url')";
+        $connect_mem = mysqli_connect($db_host,$db_user,$db_pass,$db_name);
+        mysqli_query($connect_mem,$query_mem);
+        $url_id = mysqli_insert_id($connect_mem);
+        mysqli_close($connect_mem);
+        $memcache -> set($url,$url_id);
+    }
+  }
+  if ($y<2)
   {
     $adaptive_bandwidth = $m_content['adaptive_bandwidth'];
     $begin = $m_content['begin'];
     $end = $m_content['end'];
     $a_frames_decoded = $m_content['audio']['frames_decoded'];
     $a_frames_dropped = $m_content['audio']['frames_dropped'];
-    $url = $m_content['url'];
     $a_frames_failed = $m_content['audio']['frames_failed'];
     $avg_bitrate = $m_content['avg_bitrate'];
     $id = $m_content['id'];
@@ -46,21 +60,21 @@
     $type_net = $n_content['type'];
     $query = "INSERT INTO data (
                                 begin,
-                                end, 
+                                end,
                                 adaptive_bandwidth,
                                 a_frames_decoded,
                                 a_frames_dropped,
                                 a_frames_failed,
                                 avg_bitrate,
-                                id, 
+                                id,
                                 timestamp,
-                                v_frames_decoded, 
-                                v_frames_dropped, 
-                                v_frames_failed, 
-                                type, 
+                                v_frames_decoded,
+                                v_frames_dropped,
+                                v_frames_failed,
+                                type,
                                 discontinuties,
                                 IP,
-                                url,
+                                Url_Id,
                                 duplex,
                                 gateway,
                                 IP_inner,
@@ -90,7 +104,7 @@
                                 '$type',
                                 '$discontinuties',
                                 '$IP',
-                                '$url',
+                                '$url_id',
                                 '$duplex',
                                 '$gateway',
                                 '$ip_inner',
@@ -110,17 +124,9 @@
     __log($query);
     $connect = mysqli_connect($db_host,$db_user,$db_pass,$db_name);
     mysqli_query($connect,$query);
-    $memcache = new Memcache;
-    $memcache->connect('localhost', 11211);
-    if ($memcache->get($url)){
-        return $url;
-      }else{
-        $id_incr = mysqli_insert_id($connect);
-        $memcache -> set($url,$id_incr);
-      }
     mysqli_close($connect);
   }
-    function __log($msg) 
+    function __log($msg)
     {
     error_log(date("Y-m-d H:i:s")."   ".$msg."\n",3,"/tmp/stb_stat.log");
     }
