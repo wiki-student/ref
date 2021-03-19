@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `data` (
   `sent_total_packets` int(11) NOT NULL,
   `timestamp_net` int(11) NOT NULL,
   `type_net` text NOT NULL,
-  `url` text NOT NULL
+  `url_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
