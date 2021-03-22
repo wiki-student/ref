@@ -15,7 +15,7 @@
       </form>
     </p>
     <?php
-      require_once("config.php");      
+      require_once("config.php");
       $from =strtotime($_POST['from']);
       $to = strtotime($_POST['to']);
       $ip = ip2long($_POST['ip']);
@@ -23,20 +23,20 @@
       {
         $l = str_replace("http://","",$l);
         $l = str_replace("index.m3u8","",$l);
-        if (strlen($l)>75){        
+        if (strlen($l)>75){
           return(preg_replace("/^(.+?)\?.+$/", '\\1', substr($l,0,75)).'...');
         }else{
           return(preg_replace("/^(.+?)\?.+$/", '\\1', $l));
         }
-      }  
+      }
       if($from<>'' || $to<>'' || $ip<>'')
-      { 
+      {
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-          if (!$link) 
+          if (!$link)
           {
           echo 'I can not connect to the database. Error code:' . mysqli_connect_error() . '';
           exit;
-          }   
+          }
         if($from==''){
           $from=1;
         }
@@ -44,11 +44,14 @@
           $to=time();
         }
         if($ip==''){
-          $sql= 'SELECT * FROM data 
-          WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' limit 500';
-        }else{  
-          $sql= 'SELECT *FROM data 
-          WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' AND IP= '.$ip.' limit 500';
+          $sql= 'SELECT *, url_cache.url FROM data
+          inner join url_cache on data.url_id = url_cache.id
+          WHERE data.timestamp>= '.$from.' AND data.timestamp<= '.$to.' limit 500';
+        }else{
+          $sql= 'SELECT *, url_cache.url FROM data
+          inner join url_cache on data.url_id = url_cache.id
+          WHERE data.timestamp>= '.$from.' AND data.timestamp<= '.$to.'
+          AND IP= '.$ip.' limit 500';
         }
         $result = mysqli_query($link, $sql);
         ?>
@@ -61,7 +64,7 @@
             <th>Video errors</th>
             <th>URL</th>
         </tr>
-        <?php 
+        <?php
         function errors($a,$b)
         {
           if ($b==0){
@@ -73,7 +76,7 @@
         function timetranslation($t)
         {
           return date('Y-m-d H:i:s',$t);
-        }         
+        }
         while ($row = mysqli_fetch_array($result))
         {
           echo "<tr>
@@ -89,19 +92,20 @@
       }else
       {
         $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-        if (!$link) 
+        if (!$link)
         {
-          echo 'I can not connect to the database. Error code:' . mysqli_connect_error() . '';
+          echo 'I can not connect to the database.Error code:' . mysqli_connect_error() . '';
           exit;
         }
-        $sql='SELECT IP,
-                     name, 
-                     speed, 
-                     FROM_UNIXTIME(timestamp) AS time, 
-                     a_frames_failed/a_frames_decoded*100 AS "a", 
-                     v_frames_failed/v_frames_decoded*100 AS "v",
-                     url 
-              FROM data 
+        $sql='SELECT data.IP,
+                     data.name,
+                     data.speed,
+                     FROM_UNIXTIME(data.timestamp) AS time,
+                     data.a_frames_failed/data.a_frames_decoded*100 AS "a",
+                     data.v_frames_failed/data.v_frames_decoded*100 AS "v",
+                     url_cache.url
+              FROM data
+              inner join url_cache on data.url_id = url_cache.id
               LIMIT 500';
         $result = mysqli_query($link, $sql);
     ?>
@@ -115,7 +119,7 @@
           <th>URL</th>
         </tr>
     <?php
-        while ($row = mysqli_fetch_array($result)) 
+        while ($row = mysqli_fetch_array($result))
         {
           echo "<tr>
             <td>".long2ip($row['IP'])."</td>
