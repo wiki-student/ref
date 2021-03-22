@@ -45,12 +45,12 @@
         }
         if($ip==''){
           $sql= 'SELECT *, url_cache.url FROM data
-          inner join url_cache on data.url_id = url_cache.id
-          WHERE data.timestamp>= '.$from.' AND data.timestamp<= '.$to.' limit 500';
+          inner join url_cache on url_id = url_cache.id
+          WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' limit 500';
         }else{
           $sql= 'SELECT *, url_cache.url FROM data
-          inner join url_cache on data.url_id = url_cache.id
-          WHERE data.timestamp>= '.$from.' AND data.timestamp<= '.$to.'
+          inner join url_cache on url_id = url_cache.id
+          WHERE timestamp>= '.$from.' AND timestamp<= '.$to.'
           AND IP= '.$ip.' limit 500';
         }
         $result = mysqli_query($link, $sql);
@@ -97,15 +97,15 @@
           echo 'I can not connect to the database.Error code:' . mysqli_connect_error() . '';
           exit;
         }
-        $sql='SELECT data.IP,
-                     data.name,
-                     data.speed,
-                     FROM_UNIXTIME(data.timestamp) AS time,
-                     data.a_frames_failed/data.a_frames_decoded*100 AS "a",
-                     data.v_frames_failed/data.v_frames_decoded*100 AS "v",
+        $sql='SELECT IP,
+                     name,
+                     speed,
+                     FROM_UNIXTIME(timestamp) AS time,
+                     a_frames_failed/a_frames_decoded*100 AS "a",
+                     v_frames_failed/v_frames_decoded*100 AS "v",
                      url_cache.url
               FROM data
-              inner join url_cache on data.url_id = url_cache.id
+              inner join url_cache on url_id = url_cache.id
               LIMIT 500';
         $result = mysqli_query($link, $sql);
     ?>
