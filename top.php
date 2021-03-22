@@ -34,13 +34,15 @@
         }
         if($ip==''){
           $top = mysqli_query($link, 'SELECT url, COUNT(url)  FROM
-           (SELECT DISTINCT ip,url FROM data
+           (SELECT DISTINCT IP, url_id FROM data
              WHERE timestamp>= '.$from.' AND timestamp<= '.$to.') AS q
+            inner join url_cache on url_id = id
               GROUP BY url order BY COUNT(url) DESC');
         }else{
-          $top = mysqli_query($link, 'SELECT url, COUNT(url)  FROM
-           (SELECT DISTINCT ip,url FROM data
+          $top = mysqli_query($link, 'SELECT url, COUNT(url) FROM
+           (SELECT DISTINCT IP, url_id FROM data
             WHERE timestamp>= '.$from.' AND timestamp<= '.$to.' and IP= '.$ip.') AS q
+             inner join url_cache on url_id = id
              GROUP BY url order BY COUNT(url) DESC');}
         echo 'Top sites:'."</br>";
         while($i<=24){
