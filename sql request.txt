@@ -1,2 +1,0 @@
-UPDATE data, url_cache SET data.url_id = url_cache.id WHERE data.url = url_cache.url
-
